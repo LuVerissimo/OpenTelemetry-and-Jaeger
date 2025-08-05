@@ -21,17 +21,17 @@ defmodule AppWeb.PostControllerTest do
 
   describe "index" do
     test "lists all posts", %{conn: conn} do
-      conn = get(conn, ~p"/api/posts")
+      conn = get(conn, ~p"/posts")
       assert json_response(conn, 200)["data"] == []
     end
   end
 
   describe "create post" do
     test "renders post when data is valid", %{conn: conn} do
-      conn = post(conn, ~p"/api/posts", post: @create_attrs)
+      conn = post(conn, ~p"/posts", post: @create_attrs)
       assert %{"id" => id} = json_response(conn, 201)["data"]
 
-      conn = get(conn, ~p"/api/posts/#{id}")
+      conn = get(conn, ~p"/posts/#{id}")
 
       assert %{
                "id" => ^id,
@@ -41,7 +41,7 @@ defmodule AppWeb.PostControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
-      conn = post(conn, ~p"/api/posts", post: @invalid_attrs)
+      conn = post(conn, ~p"/posts", post: @invalid_attrs)
       assert json_response(conn, 422)["errors"] != %{}
     end
   end
@@ -50,10 +50,10 @@ defmodule AppWeb.PostControllerTest do
     setup [:create_post]
 
     test "renders post when data is valid", %{conn: conn, post: %Post{id: id} = post} do
-      conn = put(conn, ~p"/api/posts/#{post}", post: @update_attrs)
+      conn = put(conn, ~p"/posts/#{post}", post: @update_attrs)
       assert %{"id" => ^id} = json_response(conn, 200)["data"]
 
-      conn = get(conn, ~p"/api/posts/#{id}")
+      conn = get(conn, ~p"/posts/#{id}")
 
       assert %{
                "id" => ^id,
@@ -63,7 +63,7 @@ defmodule AppWeb.PostControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn, post: post} do
-      conn = put(conn, ~p"/api/posts/#{post}", post: @invalid_attrs)
+      conn = put(conn, ~p"/posts/#{post}", post: @invalid_attrs)
       assert json_response(conn, 422)["errors"] != %{}
     end
   end
@@ -72,11 +72,11 @@ defmodule AppWeb.PostControllerTest do
     setup [:create_post]
 
     test "deletes chosen post", %{conn: conn, post: post} do
-      conn = delete(conn, ~p"/api/posts/#{post}")
+      conn = delete(conn, ~p"/posts/#{post}")
       assert response(conn, 204)
 
       assert_error_sent 404, fn ->
-        get(conn, ~p"/api/posts/#{post}")
+        get(conn, ~p"/posts/#{post}")
       end
     end
   end
