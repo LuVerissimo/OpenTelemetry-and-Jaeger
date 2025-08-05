@@ -2,8 +2,8 @@ import Config
 
 # Configure your database
 config :app, App.Repo,
-  username: "postgres",
-  password: "postgres",
+  username: "postgres_app",
+  password: "postgres_app",
   hostname: "localhost",
   database: "app_dev",
   stacktrace: true,
@@ -83,3 +83,5 @@ config :phoenix_live_view,
 
 # Disable swoosh api client as it is only required for production adapters.
 config :swoosh, :api_client, false
+
+config :opentelemetry, :traces_exporter, {:otel_exporter_stdout, []}

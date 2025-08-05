@@ -5,15 +5,20 @@ defmodule App.Application do
   def start(_type, _args) do
     :opentelemetry_cowboy.setup()
 
-    OpenTelemetryPhoenix.setup(adapter: :cowboy2)
-    OpenTelemetryEcto.setup([:app, :repo])
+    OpentelemetryPhoenix.setup(adapter: :cowboy2)
+
+    OpentelemetryEcto.setup([:app, :repo])
 
     children = [
       App.Repo,
       AppWeb.Telemetry,
       {Phoenix.PubSub, name: App.PubSub},
-      AppWeb.Endpoint,
+      AppWeb.Endpoint
     ]
+
+    opts = [strategy: :one_for_one, name: App.Supervisor]
+
+    Supervisor.start_link(children, opts)
   end
 
   @impl true
