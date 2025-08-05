@@ -1,0 +1,53 @@
+<h1>Listing Users</h1>
+
+<%= if @live_action in [:new, :edit] do %>
+  <.modal id="user-modal">
+    <.live_component
+      module={AppWeb.UserLive.FormComponent}
+      id={@user.id || :new}
+      title={@page_title}
+      action={@live_action}
+      user={@user}
+      return_to={~p"/users"}
+    />
+  </.modal>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="users">
+    <%= for user <- @users do %>
+      <tr id={"user-#{user.id}"}>
+        <td>{user.name}</td>
+        <td>
+          <span>
+            <.link navigate={~p"/users/#{user.id}"}>
+              Show
+            </.link>
+          </span>
+          <span>
+            <.link patch={~p"/users/#{user.id}/edit"}>
+              Edit
+            </.link>
+          </span>
+          <span>
+            <.link href="#" phx-click="delete" phx-value-id={user.id} data-confirm="Are you sure?">
+              Delete
+            </.link>
+          </span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<span>
+  <.link patch={~p"/users/new"}>
+    New User
+  </.link>
+</span>
